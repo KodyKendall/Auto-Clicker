@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace AutoClicker
 {
-    public partial class Form1 : Form
+    public partial class AutoClicker : Form
     {
         //These are to be set whenever the mouse position is moved by the user. 
         private int centerMouseX;
@@ -29,7 +29,7 @@ namespace AutoClicker
 
         delegate void UpdateMouseCoordLabelsCallback(string xCoord, string yCoord);
 
-        public Form1()
+        public AutoClicker()
         { 
             InitializeComponent();
             InitializeWaitTimes(minTimeDefault, maxTimeDefault, minClickBeforeMouseMoveDefault, maxClickBeforeMouseMoveDefault);

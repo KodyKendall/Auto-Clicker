@@ -16,7 +16,9 @@ namespace AutoClicker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            AutoClicker autoclicker = new AutoClicker();
+            autoclicker.Text = "Auto Clicker";
+            Application.Run(autoclicker);
         }
     }
 }
