@@ -25,6 +25,8 @@ namespace AutoClicker
         private int maxClickBeforeMouseMoveDefault = 30;
         private int mousePixelsToMoveFromCenter = 3;
 
+        private int mouseClicksThisRun = 0;
+
         private static object threadLocker = new object();
 
         delegate void UpdateMouseCoordLabelsCallback(string xCoord, string yCoord);
@@ -127,9 +129,6 @@ namespace AutoClicker
         /// <returns></returns>
         private bool ValidFieldData(out string typeError)
         {
-            int irrelevantData; //Needed for TryParse
-            bool hasValidData = true;
-
             typeError = "NONE";
 
             int minClicks;
@@ -192,6 +191,10 @@ namespace AutoClicker
                 {
                     int timeBetweenClicks = rnd.Next(minWaitTime, maxWaitTime);
                     DoMouseClick();
+                    this.mouseClicksThisRun++; //Keep track of mouse clicks since user started clicker. 
+
+                    MethodInvoker numClicksLabelUpdater = new MethodInvoker(() => SetMouseClickLabel(this.mouseClicksThisRun));
+                    this.Invoke(numClicksLabelUpdater);
 
                     Thread.Sleep(timeBetweenClicks);
                     counter++;
@@ -260,9 +263,14 @@ namespace AutoClicker
             }
         }
 
+        /// <summary>
+        /// Keeps track of the new mouse center to randomly move around.
+        /// This allows the user to move the mouse and have a new center 
+        /// </summary>
         private void UpdateMouseCenterIfUserMovedMouse()
         {
-            if (Math.Abs(Cursor.Position.X - centerMouseX) > 10 || Math.Abs(Cursor.Position.Y - centerMouseY) > 10)
+            if (Math.Abs(Cursor.Position.X - centerMouseX) > mousePixelsToMoveFromCenter 
+                || Math.Abs(Cursor.Position.Y - centerMouseY) > mousePixelsToMoveFromCenter)
             {
                 centerMouseX = Cursor.Position.X;
                 centerMouseY = Cursor.Position.Y;
@@ -293,9 +301,20 @@ namespace AutoClicker
             }
         }
 
+        /// <summary>
+        /// Sets the label that tells the user how many mouse click events have happened.
+        /// </summary>
+        /// <param name="numClicks"></param>
+        private void SetMouseClickLabel(int numClicks)
+        {
+            this.numMouseClicks.Text = numClicks + " Total Mouse Clicks";
+        }
+
         private void StopButton_Click(object sender, EventArgs e)
         {
             this.run = false;
+            this.mouseClicksThisRun = 0;
+            SetMouseClickLabel(mouseClicksThisRun);
             EnableSettingFields();
         }
 
