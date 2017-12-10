@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoClicker", "AutoClicker\AutoClicker.csproj", "{5FD51138-607B-48FF-A219-05D86BDD15C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoClickerTests", "AutoClickerTests\AutoClickerTests.csproj", "{B88B570E-19CB-4C10-A957-F8964E463AA5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FD51138-607B-48FF-A219-05D86BDD15C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD51138-607B-48FF-A219-05D86BDD15C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD51138-607B-48FF-A219-05D86BDD15C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD51138-607B-48FF-A219-05D86BDD15C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B88B570E-19CB-4C10-A957-F8964E463AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B88B570E-19CB-4C10-A957-F8964E463AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B88B570E-19CB-4C10-A957-F8964E463AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B88B570E-19CB-4C10-A957-F8964E463AA5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FE41DD9-A759-4402-AD92-6653A44F858E}
+	EndGlobalSection
+EndGlobal
