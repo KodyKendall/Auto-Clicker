@@ -36,6 +36,7 @@ namespace AutoClicker
 
             //Mouse coordinate label thread
             Thread mouseCoordinateLabelThread = new Thread(() => ContinuallyUpdateMouseCoordLabel());
+            mouseCoordinateLabelThread.IsBackground = true;
             mouseCoordinateLabelThread.Start();
         }
 
@@ -50,7 +51,11 @@ namespace AutoClicker
                 string currentXCoord = Cursor.Position.X.ToString();
                 string currentYCoord = Cursor.Position.Y.ToString();
 
-                this.Invoke(updateMouseCoordInvoker, new object[] { currentXCoord, currentYCoord });
+                try
+                {
+                    this.Invoke(updateMouseCoordInvoker, new object[] { currentXCoord, currentYCoord });
+                }
+                catch (Exception) { };
             }
         }
 
@@ -75,21 +80,46 @@ namespace AutoClicker
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            StartAutoClickerThread();
+            StartAutoClicker();
         }
 
         /// <summary>
         /// This is a gatekeeper method to keep only a single auto-clicker thread running 
         /// </summary>
-        private void StartAutoClickerThread()
+        private void StartAutoClicker()
         {
-            if (!this.run)
-                AutoClickOnNewThread();
-            this.run = true;
-            DisableSettingFields();
+            if (ValidFieldData())
+            {
+                if (!this.run)
+                    AutoClickOnNewThread();
+                this.run = true;
+                DisableSettingFields();
+            }
+            else
+            {
+                string errorMessage = "Wait Time and Mouse Clicks need to be non-decimal numbers!";
+                string caption = "Invalid input(s)";
+                MessageBoxButtons errorButtons = MessageBoxButtons.OK;
+                MessageBox.Show(errorMessage, caption, errorButtons);
+            }
         }
 
+        /// <summary>
+        /// Verifies that minClicksBetweenMovement, maxClicksBetweenMovement, minWait, and maxWait have integer values in them. 
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidFieldData()
+        {
+            int irrelevantData; //Needed for TryParse
+            bool hasValidData = true;
 
+            hasValidData = hasValidData && int.TryParse(this.minClicksBetweenMovement.Text.ToString(), out irrelevantData);
+            hasValidData = hasValidData && int.TryParse(this.maxClicksBetweenMovement.Text.ToString(), out irrelevantData);
+            hasValidData = hasValidData && int.TryParse(this.minWait.Text.ToString(), out irrelevantData);
+            hasValidData = hasValidData && int.TryParse(this.maxWait.Text.ToString(), out irrelevantData);
+
+            return hasValidData;
+        }
 
         /// <summary>
         /// Creates a new background thread and runs AutoClick() on that thread. 
@@ -107,11 +137,11 @@ namespace AutoClicker
         private void AutoClick()
         {
 
-            int minWaitTime = int.Parse(minWait.Text);
-            int maxWaitTime = int.Parse(maxWait.Text);
+            int minWaitTime = int.Parse(minWait.Text.ToString());
+            int maxWaitTime = int.Parse(maxWait.Text.ToString());
 
-            int minClicks = int.Parse(minClicksBetweenMovement.Text);
-            int maxClicks = int.Parse(maxClicksBetweenMovement.Text);
+            int minClicks = int.Parse(minClicksBetweenMovement.Text.ToString());
+            int maxClicks = int.Parse(maxClicksBetweenMovement.Text.ToString());
 
             while (this.run)
             {
