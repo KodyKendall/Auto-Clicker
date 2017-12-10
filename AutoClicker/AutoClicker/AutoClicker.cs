@@ -88,7 +88,9 @@ namespace AutoClicker
         /// </summary>
         private void StartAutoClicker()
         {
-            if (ValidFieldData())
+            String errorType;
+
+            if (ValidFieldData(out errorType))
             {
                 if (!this.run)
                     AutoClickOnNewThread();
@@ -97,10 +99,25 @@ namespace AutoClicker
             }
             else
             {
-                string errorMessage = "Wait Time and Mouse Clicks need to be non-decimal numbers!";
-                string caption = "Invalid input(s)";
+                string errorMessage;
+                string caption;
                 MessageBoxButtons errorButtons = MessageBoxButtons.OK;
+
+                if (errorType == "NON-INT")
+                {
+                    errorMessage = "Wait Time and Mouse Clicks need to be non-decimal numbers!";
+                    caption = "Invalid input(s)";
+                    errorButtons = MessageBoxButtons.OK;
+                }
+                else
+                {
+                    errorMessage = "Max clicks/Max time cannot be less than Min clicks/Min time!";
+                    caption = "Max < Min Error";
+                    errorButtons = MessageBoxButtons.OK;
+                }
+
                 MessageBox.Show(errorMessage, caption, errorButtons);
+
             }
         }
 
@@ -108,17 +125,38 @@ namespace AutoClicker
         /// Verifies that minClicksBetweenMovement, maxClicksBetweenMovement, minWait, and maxWait have integer values in them. 
         /// </summary>
         /// <returns></returns>
-        private bool ValidFieldData()
+        private bool ValidFieldData(out string typeError)
         {
             int irrelevantData; //Needed for TryParse
             bool hasValidData = true;
 
-            hasValidData = hasValidData && int.TryParse(this.minClicksBetweenMovement.Text.ToString(), out irrelevantData);
-            hasValidData = hasValidData && int.TryParse(this.maxClicksBetweenMovement.Text.ToString(), out irrelevantData);
-            hasValidData = hasValidData && int.TryParse(this.minWait.Text.ToString(), out irrelevantData);
-            hasValidData = hasValidData && int.TryParse(this.maxWait.Text.ToString(), out irrelevantData);
+            typeError = "NONE";
 
-            return hasValidData;
+            int minClicks;
+            int maxClicks;
+            int minWait;
+            int maxWait;
+
+            try
+            {
+                minClicks = int.Parse(this.minClicksBetweenMovement.Text.ToString());
+                maxClicks = int.Parse(this.maxClicksBetweenMovement.Text.ToString());
+                minWait = int.Parse(this.minWait.Text.ToString());
+                maxWait = int.Parse(this.maxWait.Text.ToString());
+            }
+            catch (Exception)
+            {
+                typeError = "NON-INT";
+                return false;
+            }
+
+            if (maxClicks < minClicks || maxWait < minWait)
+            {
+                typeError = "MAX LESS THAN MIN";
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
